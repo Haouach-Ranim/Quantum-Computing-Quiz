@@ -48,7 +48,7 @@ const LEVELS = [
         ]
     }
 ];
-const TIME_LIMITS = [20, 25, 30]; 
+const TIME_LIMITS = [10, 15, 20]; 
 
 const SCORING = {
     base: 100,         
@@ -178,16 +178,27 @@ function paintTimer(i) {
 
 function updateStatus() {
     const s = state[current];
+
     const answered = s.answers.filter((a) => a !== null).length;
     const missed = s.expired.filter(Boolean).length;
+
+    const completed = answered + missed;
+
+    const percentage = (completed / 10) * 100;
+
+    $("progress-fill").style.width = percentage + "%";
+    $("progress").textContent = completed + " / 10";
+
     const t = getTotals(current, false);
     const lost = t.timeLoss + t.changeLoss + t.timeouts;
+
     $("progress").textContent = s.done
         ? "Finished"
         : "Answered " + answered + " / 10" +
           (missed ? " · Time's up: " + missed : "") +
           (lost ? " · Penalties: −" + lost : "");
-    $("finish").hidden = s.done || answered + missed < 10;
+
+    $("finish").hidden = s.done || completed < 10;
 }
 
 setInterval(() => {

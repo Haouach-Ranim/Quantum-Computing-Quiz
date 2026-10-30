@@ -563,3 +563,35 @@ footer p {
 #breakdown dt { opacity: .8; }
 #breakdown dd { margin: 0; font-weight: 700; text-align: right; }
 #breakdown dt:last-of-type, #breakdown dd:last-of-type { border-top: 1px solid currentColor; padding-top: .25rem; }
+
+.progress-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 25px auto;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #080808;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.336);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #583807, #e7e188);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
