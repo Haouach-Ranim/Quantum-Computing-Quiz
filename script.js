@@ -296,7 +296,8 @@ function makeCard(question, i) {
     } else if (expired) {
         card.classList.add("expired");
     } else if (chosen !== null) {
-        card.classList.add("answered");
+        //card.classList.add("answered");
+        card.classList.add("answered", isCorrect ? "ok" : "bad");
     }
 
     let mark = "Tap to flip";
@@ -310,7 +311,9 @@ function makeCard(question, i) {
     }
     else if (s.locked[i]) mark = "Correct ✓";
     else if (expired) mark = "Time's up ✗";
-    else if (chosen !== null) mark = "Answered ✓";
+    //else if (chosen !== null) mark = "Answered ✓";
+    else if (chosen !== null) mark = isCorrect ? "Correct ✓" : "Not right ✗";
+    
 
     card.innerHTML =
         '<div class="inner">' +
@@ -329,13 +332,17 @@ function makeCard(question, i) {
         b.className = "option";
         b.textContent = text;
 
-        if (oi === chosen) b.classList.add("chosen");
+        //if (oi === chosen) b.classList.add("chosen");
+        if (oi === chosen && !s.done) b.classList.add(isCorrect ? "ok" : "bad");
+
 
         if (s.done) {
             b.disabled = true;
             if (oi === question.answer) b.classList.add("ok");
             else if (oi === chosen) b.classList.add("bad");
-        } else if (expired || s.locked[i]) {
+        } 
+        //add isCorrect
+        else if (expired || s.locked[i] || isCorrect) {
             b.disabled = true;
         } else {
             b.addEventListener("click", (e) => {
@@ -345,6 +352,17 @@ function makeCard(question, i) {
         }
         opts.appendChild(b);
     });
+
+    // new block of code
+        if (chosen !== null && !s.done) {
+        const fb = document.createElement("p");
+        fb.className = "feedback " + (isCorrect ? "ok" : "bad");
+        fb.textContent = isCorrect
+            ? "✓ Correct!"
+            : "✗ Not right. Try another answer (−" + SCORING.changePenalty + " pts per change).";
+        card.querySelector(".back").appendChild(fb);
+    }
+
 
     const flip = () => {
         if (s.done || s.expired[i]) return;
@@ -361,11 +379,27 @@ function makeCard(question, i) {
 }
 
 function answer(i, oi) {
-    const s = state[current];
+    /*const s = state[current];
     if (s.expired[i] || s.locked[i]) return;
     if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;   
     s.answers[i] = oi;
-    renderQuiz();
+    renderQuiz();*/
+    const s = state[current];
+    const question = LEVELS[current].questions[i];
+    if (s.expired[i] || s.locked[i] || s.answers[i] === question.answer) return;
+    if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;
+    s.answers[i] = oi;
+
+    // Rebuild only this card and keep it flipped so the feedback is visible at once
+    const card = makeCard(question, i);
+    card.classList.add("flipped");
+    grid.children[i].replaceWith(card);
+    card.focus();
+    updateStatus();
+
+    $("sr-feedback").textContent = "Question " + (i + 1) + ": " +
+        (oi === question.answer ? "correct." : "not right, try another answer.");
+
 }
 
 $("finish").addEventListener("click", () => {
