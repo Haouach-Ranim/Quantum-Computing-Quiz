@@ -558,3 +558,8 @@ footer p {
 }
 
 @keyframes timer-pulse { 50% { opacity: .55; } }
+
+#breakdown { display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; margin: 1rem 0; text-align: left; }
+#breakdown dt { opacity: .8; }
+#breakdown dd { margin: 0; font-weight: 700; text-align: right; }
+#breakdown dt:last-of-type, #breakdown dd:last-of-type { border-top: 1px solid currentColor; padding-top: .25rem; }

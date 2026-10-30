@@ -48,16 +48,26 @@ const LEVELS = [
         ]
     }
 ];
-const TIME_LIMITS = [10, 15, 20]; 
+const TIME_LIMITS = [20, 25, 30]; 
+
+const SCORING = {
+    base: 100,         
+    maxTimeLoss: 0.5, 
+    changePenalty: 10, 
+    timeoutPenalty: 10 
+};
+const MAX_POINTS = SCORING.base * 10;
 
 const state = LEVELS.map(() => ({
     unlocked: false,
     answers: Array(10).fill(null),
     locked: Array(10).fill(false),
     remaining: Array(10).fill(null),   
-    expired: Array(10).fill(false),    
+    expired: Array(10).fill(false),   
+    changes: Array(10).fill(0),       
     done: false,
-    best: null
+    best: null,                       
+    bestPoints: null                
 }));
 state[0].unlocked = true;
 let current = 0;
@@ -74,11 +84,86 @@ function getFeedback(score) {
     return "Quantum Novice — review the basics and try again.";
 }
 
+function elapsedOf(l, i) {
+    const r = state[l].remaining[i];
+    return r === null ? 0 : TIME_LIMITS[l] - r;
+}
+
+function worthAt(l, elapsed) {
+    const ratio = Math.min(Math.max(elapsed, 0), TIME_LIMITS[l]) / TIME_LIMITS[l];
+    return Math.round(SCORING.base * (1 - SCORING.maxTimeLoss * ratio));
+}
+
+function questionResult(l, i) {
+    const s = state[l];
+    const r = { points: 0, timeLoss: 0, changeLoss: 0, timeout: 0 };
+    if (s.expired[i]) {
+        r.timeout = SCORING.timeoutPenalty;
+        return r;
+    }
+    if (s.answers[i] === null) return r;
+
+    const worth = worthAt(l, elapsedOf(l, i));
+    r.timeLoss = SCORING.base - worth;
+    r.changeLoss = Math.min(worth, s.changes[i] * SCORING.changePenalty);
+    if (s.answers[i] === LEVELS[l].questions[i].answer) {
+        r.points = worth - r.changeLoss;
+    }
+    return r;
+}
+
+function getTotals(l, onlyCorrect) {
+    let points = 0, timeLoss = 0, changeLoss = 0, timeouts = 0;
+    LEVELS[l].questions.forEach((q, i) => {
+        const r = questionResult(l, i);
+        const ok = state[l].answers[i] === q.answer;
+        points += r.points;
+        timeouts += r.timeout;
+        if (!onlyCorrect || ok) {
+            timeLoss += r.timeLoss;
+            changeLoss += r.changeLoss;
+        }
+    });
+    return { points, timeLoss, changeLoss, timeouts, total: Math.max(0, points - timeouts) };
+}
+
+function ensureBreakdown() {
+    let el = $("breakdown");
+    if (!el) {
+        el = document.createElement("dl");
+        el.id = "breakdown";
+        $("score").insertAdjacentElement("afterend", el);
+    }
+    return el;
+}
+
+function renderBreakdown(l) {
+    const t = getTotals(l, true);
+    const lines = [
+        ["Correct answers", getScore(l) + " / 10"],
+        ["Points before penalties", String(getScore(l) * SCORING.base)],
+        ["Time penalty", "−" + t.timeLoss],
+        ["Answer changes", "−" + t.changeLoss],
+        ["Time-out penalty", "−" + t.timeouts],
+        ["Total", t.total + " pts"]
+    ];
+    const box = ensureBreakdown();
+    box.replaceChildren();
+    lines.forEach(([label, value]) => {
+        const dt = document.createElement("dt");
+        const dd = document.createElement("dd");
+        dt.textContent = label;
+        dd.textContent = value;
+        box.append(dt, dd);
+    });
+}
+
 function timerLabel(i) {
     const s = state[current];
     if (s.done || s.expired[i] || s.answers[i] !== null) return "";
     const t = s.remaining[i] === null ? TIME_LIMITS[current] : s.remaining[i];
-    return "⏱ " + t + "s";
+    const worth = worthAt(current, TIME_LIMITS[current] - t);
+    return "⏱ " + t + "s · " + worth + " pts";
 }
 
 function paintEl(el, i) {
@@ -95,14 +180,18 @@ function updateStatus() {
     const s = state[current];
     const answered = s.answers.filter((a) => a !== null).length;
     const missed = s.expired.filter(Boolean).length;
+    const t = getTotals(current, false);
+    const lost = t.timeLoss + t.changeLoss + t.timeouts;
     $("progress").textContent = s.done
         ? "Finished"
-        : "Answered " + answered + " / 10" + (missed ? " · Time's up: " + missed : "");
+        : "Answered " + answered + " / 10" +
+          (missed ? " · Time's up: " + missed : "") +
+          (lost ? " · Penalties: −" + lost : "");
     $("finish").hidden = s.done || answered + missed < 10;
 }
 
 setInterval(() => {
-    if (quiz.hidden || document.hidden) return;   
+    if (quiz.hidden || document.hidden) return;  
     const s = state[current];
     if (s.done) return;
 
@@ -132,12 +221,13 @@ function renderHome() {
         b.type = "button";
         b.className = "level";
         b.disabled = !s.unlocked;
+        const pts = s.bestPoints !== null ? " · Best: " + s.bestPoints + " pts" : "";
         const status = !s.unlocked
             ? "Level locked"
             : s.best === 10
-                ? "Completed (10/10) ✓"
+                ? "Completed (10/10) ✓" + pts
                 : s.best !== null
-                    ? "Last score: " + s.best + "/10 (Needs 10/10)"
+                    ? "Last score: " + s.best + "/10 (Needs 10/10)" + pts
                     : "Ready to play";
         b.innerHTML = "<strong>" + level.name + "</strong>" + level.description +
             "<br>" + TIME_LIMITS[i] + "s per question<br>" + status;
@@ -161,10 +251,12 @@ function renderQuiz() {
 
     $("level-title").textContent = "Level: " + level.name;
 
-    const score = getScore(current);
     $("result").hidden = !s.done;
     if (s.done) {
-        $("score").textContent = score + " / 10";
+        const score = getScore(current);
+        const totals = getTotals(current, true);
+        $("score").textContent = totals.total + " / " + MAX_POINTS + " pts";
+        renderBreakdown(current);
         $("feedback").textContent = getFeedback(score);
         $("retry").hidden = score === 10;
         $("next").hidden = score !== 10 || current === LEVELS.length - 1;
@@ -197,7 +289,14 @@ function makeCard(question, i) {
     }
 
     let mark = "Tap to flip";
-    if (s.done) mark = expired ? "Time's up ✗" : isCorrect ? "Correct ✓" : "Wrong ✗";
+    if (s.done) {
+        const r = questionResult(current, i);
+        mark = expired
+            ? "Time's up ✗ −" + r.timeout
+            : isCorrect
+                ? "Correct ✓ +" + r.points + " pts"
+                : "Wrong ✗";
+    }
     else if (s.locked[i]) mark = "Correct ✓";
     else if (expired) mark = "Time's up ✗";
     else if (chosen !== null) mark = "Answered ✓";
@@ -225,7 +324,7 @@ function makeCard(question, i) {
             b.disabled = true;
             if (oi === question.answer) b.classList.add("ok");
             else if (oi === chosen) b.classList.add("bad");
-        } else if (expired || s.locked[i]) {    
+        } else if (expired || s.locked[i]) {
             b.disabled = true;
         } else {
             b.addEventListener("click", (e) => {
@@ -252,7 +351,8 @@ function makeCard(question, i) {
 
 function answer(i, oi) {
     const s = state[current];
-    if (s.expired[i] || s.locked[i]) return;      
+    if (s.expired[i] || s.locked[i]) return;
+    if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;   
     s.answers[i] = oi;
     renderQuiz();
 }
@@ -262,6 +362,7 @@ $("finish").addEventListener("click", () => {
     s.done = true;
     const score = getScore(current);
     s.best = score;
+    s.bestPoints = Math.max(s.bestPoints ?? 0, getTotals(current, true).total);
     s.locked = s.answers.map((a, k) => a === LEVELS[current].questions[k].answer);
 
     if (score === 10 && current + 1 < LEVELS.length) {
@@ -277,6 +378,7 @@ $("retry").addEventListener("click", () => {
     s.answers = s.answers.map((a, k) => (s.locked[k] ? a : null));
     s.remaining = s.remaining.map((t, k) => (s.locked[k] ? t : null));  
     s.expired = s.expired.map((e, k) => (s.locked[k] ? e : false));
+    s.changes = s.changes.map((c, k) => (s.locked[k] ? c : 0));
     s.done = false;
     renderQuiz();
 });
