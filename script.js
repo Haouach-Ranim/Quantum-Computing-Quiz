@@ -48,20 +48,23 @@ const LEVELS = [
         ]
     }
 ];
-// Tracking State with an Array for each level
+const TIME_LIMITS = [10, 15, 20]; 
+
 const state = LEVELS.map(() => ({
     unlocked: false,
-    answers: Array(10).fill(null),   
-    locked: Array(10).fill(false),  
-    done: false,                 
-    best: null                       
+    answers: Array(10).fill(null),
+    locked: Array(10).fill(false),
+    remaining: Array(10).fill(null),   
+    expired: Array(10).fill(false),    
+    done: false,
+    best: null
 }));
 state[0].unlocked = true;
 let current = 0;
 
 const $ = (id) => document.getElementById(id);
 const home = $("home"), quiz = $("quiz"), grid = $("grid");
-//Dynamic Score Computation
+
 const getScore = (i) => state[i].answers.filter((a, k) => a === LEVELS[i].questions[k].answer).length;
 
 function getFeedback(score) {
@@ -70,6 +73,55 @@ function getFeedback(score) {
     if (score >= 4) return "Scholar in Progress — keep refining your answers.";
     return "Quantum Novice — review the basics and try again.";
 }
+
+function timerLabel(i) {
+    const s = state[current];
+    if (s.done || s.expired[i] || s.answers[i] !== null) return "";
+    const t = s.remaining[i] === null ? TIME_LIMITS[current] : s.remaining[i];
+    return "⏱ " + t + "s";
+}
+
+function paintEl(el, i) {
+    const s = state[current];
+    el.textContent = timerLabel(i);
+    el.classList.toggle("urgent", s.remaining[i] !== null && s.remaining[i] <= 5);
+}
+
+function paintTimer(i) {
+    grid.querySelectorAll('[data-timer="' + i + '"]').forEach((el) => paintEl(el, i));
+}
+
+function updateStatus() {
+    const s = state[current];
+    const answered = s.answers.filter((a) => a !== null).length;
+    const missed = s.expired.filter(Boolean).length;
+    $("progress").textContent = s.done
+        ? "Finished"
+        : "Answered " + answered + " / 10" + (missed ? " · Time's up: " + missed : "");
+    $("finish").hidden = s.done || answered + missed < 10;
+}
+
+setInterval(() => {
+    if (quiz.hidden || document.hidden) return;   
+    const s = state[current];
+    if (s.done) return;
+
+    let changed = false;
+    s.remaining.forEach((t, i) => {
+        if (t === null || s.answers[i] !== null || s.expired[i]) return;
+        s.remaining[i] = t - 1;
+        if (s.remaining[i] <= 0) {
+            s.remaining[i] = 0;
+            s.expired[i] = true;
+            grid.children[i].replaceWith(makeCard(LEVELS[current].questions[i], i));
+            changed = true;
+        } else {
+            paintTimer(i);
+        }
+    });
+    if (changed) updateStatus();
+}, 1000);
+
 
 function renderHome() {
     const box = $("levels");
@@ -80,8 +132,15 @@ function renderHome() {
         b.type = "button";
         b.className = "level";
         b.disabled = !s.unlocked;
-        const status = !s.unlocked ? "level Locked" : s.best === 10 ? "Completed (10/10) ✓" : s.best !== null ? "Last score: " + s.best + "/10 (Needs 10/10)" : "Ready to play";
-        b.innerHTML = "<strong>" + level.name + "</strong>" + level.description + "<br>" + status;
+        const status = !s.unlocked
+            ? "Level locked"
+            : s.best === 10
+                ? "Completed (10/10) ✓"
+                : s.best !== null
+                    ? "Last score: " + s.best + "/10 (Needs 10/10)"
+                    : "Ready to play";
+        b.innerHTML = "<strong>" + level.name + "</strong>" + level.description +
+            "<br>" + TIME_LIMITS[i] + "s per question<br>" + status;
         b.addEventListener("click", () => openLevel(i));
         box.appendChild(b);
     });
@@ -99,10 +158,8 @@ function openLevel(i) {
 function renderQuiz() {
     const level = LEVELS[current];
     const s = state[current];
-    const answered = s.answers.filter((a) => a !== null).length;
 
     $("level-title").textContent = "Level: " + level.name;
-    $("progress").textContent = s.done ? "Finished" : "Answered " + answered + " / 10";
 
     const score = getScore(current);
     $("result").hidden = !s.done;
@@ -113,7 +170,7 @@ function renderQuiz() {
         $("next").hidden = score !== 10 || current === LEVELS.length - 1;
     }
 
-    $("finish").hidden = s.done || answered < 10;
+    updateStatus();
 
     grid.innerHTML = "";
     level.questions.forEach((question, i) => grid.appendChild(makeCard(question, i)));
@@ -123,6 +180,7 @@ function makeCard(question, i) {
     const s = state[current];
     const chosen = s.answers[i];
     const isCorrect = chosen === question.answer;
+    const expired = s.expired[i];
 
     const card = document.createElement("div");
     card.className = "card";
@@ -132,21 +190,27 @@ function makeCard(question, i) {
         card.classList.add("done", isCorrect ? "ok" : "bad");
     } else if (s.locked[i]) {
         card.classList.add("ok", "locked");
+    } else if (expired) {
+        card.classList.add("expired");
     } else if (chosen !== null) {
         card.classList.add("answered");
     }
 
     let mark = "Tap to flip";
-    if (s.done) mark = isCorrect ? "Correct ✓" : "Wrong ✗";
+    if (s.done) mark = expired ? "Time's up ✗" : isCorrect ? "Correct ✓" : "Wrong ✗";
     else if (s.locked[i]) mark = "Correct ✓";
+    else if (expired) mark = "Time's up ✗";
     else if (chosen !== null) mark = "Answered ✓";
 
     card.innerHTML =
         '<div class="inner">' +
-        '<div class="face front"><span class="big">' + (i + 1) + "</span><span>" + mark + "</span></div>" +
-        '<div class="face back"><p class="q"></p><div class="opts"></div></div>' +
+        '<div class="face front"><span class="big">' + (i + 1) + "</span><span>" + mark +
+        '</span><span class="timer" data-timer="' + i + '"></span></div>' +
+        '<div class="face back"><span class="timer" data-timer="' + i + '"></span>' +
+        '<p class="q"></p><div class="opts"></div></div>' +
         "</div>";
     card.querySelector(".q").textContent = question.q;
+    card.querySelectorAll(".timer").forEach((el) => paintEl(el, i));
 
     const opts = card.querySelector(".opts");
     question.options.forEach((text, oi) => {
@@ -155,14 +219,14 @@ function makeCard(question, i) {
         b.className = "option";
         b.textContent = text;
 
-        if (oi === chosen) {
-            b.classList.add("chosen");
-        }
-// to style the correct answers green and wrong answers red
+        if (oi === chosen) b.classList.add("chosen");
+
         if (s.done) {
             b.disabled = true;
             if (oi === question.answer) b.classList.add("ok");
             else if (oi === chosen) b.classList.add("bad");
+        } else if (expired || s.locked[i]) {    
+            b.disabled = true;
         } else {
             b.addEventListener("click", (e) => {
                 e.stopPropagation();
@@ -173,7 +237,10 @@ function makeCard(question, i) {
     });
 
     const flip = () => {
-        if (s.done) return; 
+        if (s.done || s.expired[i]) return;
+        if (s.remaining[i] === null && s.answers[i] === null) {
+            s.remaining[i] = TIME_LIMITS[current];
+        }
         card.classList.toggle("flipped");
     };
     card.addEventListener("click", flip);
@@ -184,32 +251,32 @@ function makeCard(question, i) {
 }
 
 function answer(i, oi) {
-    state[current].answers[i] = oi;
-    renderQuiz(); 
+    const s = state[current];
+    if (s.expired[i] || s.locked[i]) return;      
+    s.answers[i] = oi;
+    renderQuiz();
 }
 
-// When the user finishes a level and submits their answers, the "finish" event listener evaluates the quiz and locks in all correct responses:
 $("finish").addEventListener("click", () => {
     const s = state[current];
     s.done = true;
     const score = getScore(current);
     s.best = score;
-    // Evaluates every answer and locks it if it matches the correct answer
-    //Compares the user's answer against the actual correct answer. If correct, s.locked[k] becomes true.
     s.locked = s.answers.map((a, k) => a === LEVELS[current].questions[k].answer);
-    
+
     if (score === 10 && current + 1 < LEVELS.length) {
-        state[current + 1].unlocked = true; 
+        state[current + 1].unlocked = true;
     }
-    
+
     renderQuiz();
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
-// Clearing Only Incorrect Answers on Retry
+
 $("retry").addEventListener("click", () => {
     const s = state[current];
-    // Keeps locked answers intact, resets un-locked (incorrect/unanswered) ones to null
     s.answers = s.answers.map((a, k) => (s.locked[k] ? a : null));
+    s.remaining = s.remaining.map((t, k) => (s.locked[k] ? t : null));  
+    s.expired = s.expired.map((e, k) => (s.locked[k] ? e : false));
     s.done = false;
     renderQuiz();
 });
