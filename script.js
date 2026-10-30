@@ -71,6 +71,35 @@ const state = LEVELS.map(() => ({
 }));
 state[0].unlocked = true;
 let current = 0;
+//progress saving
+const STORAGE_KEY = "quantum-quiz-progress";
+
+function saveProgress() {
+    try {
+        const data = state.map((s) => ({ unlocked: s.unlocked, best: s.best, bestPoints: s.bestPoints }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+        // Storage unavailable (private mode, quota...): the quiz still works without saving.
+    }
+}
+
+function loadProgress() {
+    try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!Array.isArray(data)) return;
+        data.forEach((d, i) => {
+            if (!state[i] || !d || typeof d !== "object") return;
+            if (d.unlocked === true) state[i].unlocked = true;
+            if (Number.isInteger(d.best) && d.best >= 0 && d.best <= 10) state[i].best = d.best;
+            if (Number.isFinite(d.bestPoints) && d.bestPoints >= 0 && d.bestPoints <= MAX_POINTS) {
+                state[i].bestPoints = d.bestPoints;
+            }
+        });
+    } catch (e) {
+        // Corrupted data: ignore it and start fresh.
+    }
+}
+
 
 const $ = (id) => document.getElementById(id);
 const home = $("home"), quiz = $("quiz"), grid = $("grid");
@@ -232,13 +261,15 @@ function renderHome() {
         b.type = "button";
         b.className = "level";
         b.disabled = !s.unlocked;
-        const pts = s.bestPoints !== null ? " · Best: " + s.bestPoints + " pts" : "";
+        //const pts = s.bestPoints !== null ? " · Best: " + s.bestPoints + " pts" : "";
+        const pts = s.bestPoints !== null ? " · " + s.bestPoints + " pts" : "";
         const status = !s.unlocked
             ? "Level locked"
             : s.best === 10
                 ? "Completed (10/10) ✓" + pts
                 : s.best !== null
-                    ? "Last score: " + s.best + "/10 (Needs 10/10)" + pts
+                    // old is "Last score"
+                    ? "Best score: " + s.best + "/10 (Needs 10/10)" + pts
                     : "Ready to play";
         b.innerHTML = "<strong>" + level.name + "</strong>" + level.description +
             "<br>" + TIME_LIMITS[i] + "s per question<br>" + status;
@@ -406,14 +437,16 @@ $("finish").addEventListener("click", () => {
     const s = state[current];
     s.done = true;
     const score = getScore(current);
-    s.best = score;
+    // Save the best score
+    s.best = Math.max(s.best ?? 0, score);
     s.bestPoints = Math.max(s.bestPoints ?? 0, getTotals(current, true).total);
     s.locked = s.answers.map((a, k) => a === LEVELS[current].questions[k].answer);
 
     if (score === 10 && current + 1 < LEVELS.length) {
         state[current + 1].unlocked = true;
     }
-
+    saveProgress();
+    
     renderQuiz();
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
@@ -438,4 +471,5 @@ $("next").addEventListener("click", () => {
 
 $("back").addEventListener("click", renderHome);
 
+loadProgress();
 renderHome();
