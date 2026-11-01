@@ -365,6 +365,20 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
 .card.done .front span:last-child { color: var(--ink); font-weight: 500; }
 
 .opts { counter-reset: opt; }
+.qtype {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.75;
+}
+.opts.vf .option { justify-content: center; text-align: center; }
+.opts.vf .option::before { display: none; }
+.opts.vf .option::after { margin-left: 10px; }
 .option {
     counter-increment: opt;
     display: flex;

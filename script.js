@@ -4,13 +4,16 @@ const LEVELS = [
         description: "The basics of quantum computing",
         questions: [
             { q: "What is the basic unit of information in a quantum computer?", options: ["Bit", "Byte", "Qubit", "Pixel"], answer: 2 },
-            { q: "A classical bit can be in which state?", options: ["0 or 1 only", "Any number", "Only 1", "Neither 0 nor 1"], answer: 0 },
+            //{ q: "A classical bit can be in which state?", options: ["0 or 1 only", "Any number", "Only 1", "Neither 0 nor 1"], answer: 0 },
+            { type: "vf", q: "A classical bit can only be 0 or 1.", answer: 0 },
             { q: "What does superposition mean for a qubit?", options: ["It is switched off", "It is a combination of 0 and 1 at the same time", "It is copied twice", "It moves faster than light"], answer: 1 },
             { q: "Quantum computers are expected to be especially good at:", options: ["Browsing the web", "Playing videos", "Solving certain very complex problems faster", "Storing photos"], answer: 2 },
-            { q: "Which branch of physics do quantum computers rely on?", options: ["Thermodynamics", "Quantum mechanics", "Optics only", "Fluid mechanics"], answer: 1 },
+            //{ q: "Which branch of physics do quantum computers rely on?", options: ["Thermodynamics", "Quantum mechanics", "Optics only", "Fluid mechanics"], answer: 1 },
+            { type: "vf", q: "Quantum computers rely on quantum mechanics.", answer: 0 },
             { q: "Which company created the Qiskit toolkit?", options: ["IBM", "Apple", "Netflix", "Tesla"], answer: 0 },
             { q: "What do you get when you measure a qubit?", options: ["A decimal number", "A color", "0 or 1", "Nothing"], answer: 2 },
-            { q: "Will quantum computers replace everyday laptops soon?", options: ["Yes, next year", "No, they are specialised machines", "Yes, they are cheaper", "They already have"], answer: 1 },
+            //{ q: "Will quantum computers replace everyday laptops soon?", options: ["Yes, next year", "No, they are specialised machines", "Yes, they are cheaper", "They already have"], answer: 1 },
+            { type: "vf", q: "Quantum computers are expected to replace everyday laptops within the next year.", answer: 1 },
             { q: "What is entanglement?", options: ["Two qubits linked so that their states are correlated", "A broken qubit", "A type of cable", "A programming language"], answer: 0 },
             { q: "Why are many quantum computers kept extremely cold?", options: ["To save electricity", "To reduce noise and keep fragile quantum states stable", "To look impressive", "To prevent rust"], answer: 1 }
         ]
@@ -20,14 +23,17 @@ const LEVELS = [
         description: "Gates, algorithms and key ideas",
         questions: [
             { q: "Which gate puts a qubit into an equal superposition?", options: ["AND gate", "Hadamard gate", "NOT gate", "OR gate"], answer: 1 },
-            { q: "Which gate flips a qubit from 0 to 1 (and 1 to 0)?", options: ["Pauli-X gate", "Hadamard gate", "Phase gate", "Measure gate"], answer: 0 },
+            //{ q: "Which gate flips a qubit from 0 to 1 (and 1 to 0)?", options: ["Pauli-X gate", "Hadamard gate", "Phase gate", "Measure gate"], answer: 0 },
+            { type: "vf", q: "The Pauli-X gate flips a qubit from 0 to 1 (and 1 to 0).", answer: 0 },
             { q: "What is Shor's algorithm used for?", options: ["Sorting lists", "Searching a database", "Factoring large integers", "Compressing files"], answer: 2 },
             { q: "What is Grover's algorithm used for?", options: ["Searching an unsorted database faster", "Encrypting messages", "Drawing graphics", "Cooling qubits"], answer: 0 },
             { q: "What is decoherence?", options: ["Merging two qubits", "A kind of quantum gate", "A cooling method", "The loss of a qubit's quantum state due to its environment"], answer: 3 },
             { q: "What is a Bell state?", options: ["A sound produced by qubits", "A maximally entangled two-qubit state", "A qubit at rest", "A type of error"], answer: 1 },
             { q: "How many basis states can 2 qubits be in superposition of?", options: ["2", "3", "4", "8"], answer: 2 },
-            { q: "The CNOT gate acts on how many qubits?", options: ["One", "Two", "Three", "Ten"], answer: 1 },
-            { q: "In which year did Google claim quantum supremacy?", options: ["2009", "2012", "2016", "2019"], answer: 3 },
+            //{ q: "The CNOT gate acts on how many qubits?", options: ["One", "Two", "Three", "Ten"], answer: 1 },
+            { type: "vf", q: "The CNOT gate acts on three qubits.", answer: 1 },
+            //{ q: "In which year did Google claim quantum supremacy?", options: ["2009", "2012", "2016", "2019"], answer: 3 },
+            { type: "vf", q: "Google claimed quantum supremacy in 2012.", answer: 1 },
             { q: "Which is a common qubit technology?", options: ["Superconducting circuits", "Vacuum tubes", "Magnetic tape", "Punch cards"], answer: 0 }
         ]
     },
@@ -36,19 +42,26 @@ const LEVELS = [
         description: "Theory and advanced concepts",
         questions: [
             { q: "What does the Bloch sphere represent?", options: ["The cooling chamber", "The state of a single qubit", "A network of computers", "The speed of an algorithm"], answer: 1 },
-            { q: "What does the no-cloning theorem state?", options: ["Qubits cannot be measured", "Classical bits cannot be copied", "An unknown quantum state cannot be copied perfectly", "Two qubits cannot be entangled"], answer: 2 },
+            //{ q: "What does the no-cloning theorem state?", options: ["Qubits cannot be measured", "Classical bits cannot be copied", "An unknown quantum state cannot be copied perfectly", "Two qubits cannot be entangled"], answer: 2 },
+            { type: "vf", q: "An unknown quantum state can be copied perfectly.", answer: 1 },
             { q: "Which subroutine is central to Shor's algorithm?", options: ["Quantum Fourier Transform", "Binary search", "Bubble sort", "Hash function"], answer: 0 },
             { q: "How many queries does Grover's algorithm need to search N items?", options: ["About N", "About N squared", "About log N", "About the square root of N"], answer: 3 },
             { q: "Which complexity class captures problems efficiently solvable by a quantum computer?", options: ["P only", "BQP", "NP-hard only", "EXP"], answer: 1 },
             { q: "Which of these is a leading quantum error-correcting code?", options: ["Morse code", "Huffman code", "Surface code", "ASCII"], answer: 2 },
-            { q: "The BB84 protocol is used for:", options: ["Quantum key distribution", "Quantum teleporting people", "Factoring numbers", "Qubit cooling"], answer: 0 },
+            //{ q: "The BB84 protocol is used for:", options: ["Quantum key distribution", "Quantum teleporting people", "Factoring numbers", "Qubit cooling"], answer: 0 },
+            { type: "vf", q: "The BB84 protocol is used for quantum key distribution.", answer: 0 },
             { q: "The state |+> is equal to:", options: ["|0> - |1>", "(|0> + |1>) / sqrt(2)", "|1>", "|0> |1>"], answer: 1 },
             { q: "What is a Toffoli gate?", options: ["A single-qubit rotation", "A measurement gate", "A two-qubit swap", "A three-qubit controlled-controlled-NOT gate"], answer: 3 },
-            { q: "What does Bell's theorem show?", options: ["Qubits are always 0", "No local hidden-variable theory can reproduce all quantum predictions", "Quantum computers are impossible", "Light is slower than sound"], answer: 1 }
+            //{ q: "What does Bell's theorem show?", options: ["Qubits are always 0", "No local hidden-variable theory can reproduce all quantum predictions", "Quantum computers are impossible", "Light is slower than sound"], answer: 1 }
+            { type: "vf", q: "Bell's theorem proves that quantum computers are impossible.", answer: 1 }
         ]
     }
 ];
 const TIME_LIMITS = [10, 15, 20]; 
+
+// Question types: "qcm" (default, uses its own options) or "vf" (True/False).
+// For "vf", answer is 0 for True and 1 for False.
+const VF_OPTIONS = ["True", "False"];
 
 const SCORING = {
     base: 100,         
@@ -355,9 +368,19 @@ function makeCard(question, i) {
         "</div>";
     card.querySelector(".q").textContent = question.q;
     card.querySelectorAll(".timer").forEach((el) => paintEl(el, i));
-
+    //old version for only multiple choice questions
+    /*const opts = card.querySelector(".opts");
+    question.options.forEach((text, oi) => {*/
     const opts = card.querySelector(".opts");
-    question.options.forEach((text, oi) => {
+    const isVF = question.type === "vf";
+
+    const kind = document.createElement("span");
+    kind.className = "qtype";
+    kind.textContent = isVF ? "True / False" : "Multiple choice";
+    card.querySelector(".q").before(kind);
+    if (isVF) opts.classList.add("vf");
+
+    (isVF ? VF_OPTIONS : question.options).forEach((text, oi) => {
         const b = document.createElement("button");
         b.type = "button";
         b.className = "option";
