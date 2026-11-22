@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quantum Computing Quiz</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="./images/atom.png">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../images/atom.png">
 </head>
 <body>
     <header>
@@ -17,12 +17,21 @@
         <section id="home">
             <h2>Choose a level</h2>
             <div class="levels" id="levels"></div>
+            <label for="player">Your name</label>
+<input id="player" maxlength="20" autocomplete="nickname">
+<p id="error" role="alert" hidden></p>
+
+<h2>Leaderboard</h2>
+<select id="lb-level" aria-label="Leaderboard level"></select>
+<ol id="leaderboard"></ol>
+<div class="bar"><div id="progress-fill"></div></div>
+<div id="sr-feedback" class="sr-only" aria-live="polite"></div>
         </section>
 
         <section id="quiz" hidden>
             <div class="topbar">
                 <button type="button" id="back" class="btn secondary">Levels</button>
-                <h2 id="level-title"></h2>
+                <h2 id="level-title">Level</h2>
                 <div class="progress-container">
             <div class="progress-info">
                 <span>Quiz Progress</span>
@@ -59,6 +68,6 @@
         <p>Mini-projet Web FIA3 · ISSAT Sousse</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src=".../js/script.js"></script>
 </body>
 </html>

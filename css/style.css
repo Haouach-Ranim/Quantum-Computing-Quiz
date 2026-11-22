@@ -23,7 +23,7 @@ body {
     font-family: var(--serif);
     color: var(--ink);
     line-height: 1.5;
-    background: url("images/Antique\ Scientific\ Parchment\ Notebook.png") center / cover no-repeat fixed, #e4d0a0;
+    background: url("../images/Antique\ Scientific\ Parchment\ Notebook.png") center / cover no-repeat fixed, #e4d0a0;
 }
 body::before {
     content: "";
@@ -653,3 +653,13 @@ footer p {
     border-radius: 20px;
     transition: width 0.4s ease;
 }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.qtype { display: block; font-size: .8rem; opacity: .7; margin-bottom: .25rem; }
+.opts.vf { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.option.ok  { background: #d9f7ee; border-color: #0f9d78; }
+.option.bad { background: #ffe0ea; border-color: #d6285f; }
+.feedback.ok  { color: #0f9d78; }
+.feedback.bad { color: #d6285f; }
+.bar { height: 10px; background: rgba(128,128,128,.3); border-radius: 99px; overflow: hidden; margin: .5rem 0; }
+#progress-fill { height: 100%; width: 0; background: #5b3df5; transition: width .3s ease; }

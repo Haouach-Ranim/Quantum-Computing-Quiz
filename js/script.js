@@ -1,73 +1,11 @@
-const LEVELS = [
-    {
-        name: "Easy",
-        description: "The basics of quantum computing",
-        questions: [
-            { q: "What is the basic unit of information in a quantum computer?", options: ["Bit", "Byte", "Qubit", "Pixel"], answer: 2 },
-            //{ q: "A classical bit can be in which state?", options: ["0 or 1 only", "Any number", "Only 1", "Neither 0 nor 1"], answer: 0 },
-            { type: "vf", q: "A classical bit can only be 0 or 1.", answer: 0 },
-            { q: "What does superposition mean for a qubit?", options: ["It is switched off", "It is a combination of 0 and 1 at the same time", "It is copied twice", "It moves faster than light"], answer: 1 },
-            { q: "Quantum computers are expected to be especially good at:", options: ["Browsing the web", "Playing videos", "Solving certain very complex problems faster", "Storing photos"], answer: 2 },
-            //{ q: "Which branch of physics do quantum computers rely on?", options: ["Thermodynamics", "Quantum mechanics", "Optics only", "Fluid mechanics"], answer: 1 },
-            { type: "vf", q: "Quantum computers rely on quantum mechanics.", answer: 0 },
-            { q: "Which company created the Qiskit toolkit?", options: ["IBM", "Apple", "Netflix", "Tesla"], answer: 0 },
-            { q: "What do you get when you measure a qubit?", options: ["A decimal number", "A color", "0 or 1", "Nothing"], answer: 2 },
-            //{ q: "Will quantum computers replace everyday laptops soon?", options: ["Yes, next year", "No, they are specialised machines", "Yes, they are cheaper", "They already have"], answer: 1 },
-            { type: "vf", q: "Quantum computers are expected to replace everyday laptops within the next year.", answer: 1 },
-            { q: "What is entanglement?", options: ["Two qubits linked so that their states are correlated", "A broken qubit", "A type of cable", "A programming language"], answer: 0 },
-            { q: "Why are many quantum computers kept extremely cold?", options: ["To save electricity", "To reduce noise and keep fragile quantum states stable", "To look impressive", "To prevent rust"], answer: 1 }
-        ]
-    },
-    {
-        name: "Medium",
-        description: "Gates, algorithms and key ideas",
-        questions: [
-            { q: "Which gate puts a qubit into an equal superposition?", options: ["AND gate", "Hadamard gate", "NOT gate", "OR gate"], answer: 1 },
-            //{ q: "Which gate flips a qubit from 0 to 1 (and 1 to 0)?", options: ["Pauli-X gate", "Hadamard gate", "Phase gate", "Measure gate"], answer: 0 },
-            { type: "vf", q: "The Pauli-X gate flips a qubit from 0 to 1 (and 1 to 0).", answer: 0 },
-            { q: "What is Shor's algorithm used for?", options: ["Sorting lists", "Searching a database", "Factoring large integers", "Compressing files"], answer: 2 },
-            { q: "What is Grover's algorithm used for?", options: ["Searching an unsorted database faster", "Encrypting messages", "Drawing graphics", "Cooling qubits"], answer: 0 },
-            { q: "What is decoherence?", options: ["Merging two qubits", "A kind of quantum gate", "A cooling method", "The loss of a qubit's quantum state due to its environment"], answer: 3 },
-            { q: "What is a Bell state?", options: ["A sound produced by qubits", "A maximally entangled two-qubit state", "A qubit at rest", "A type of error"], answer: 1 },
-            { q: "How many basis states can 2 qubits be in superposition of?", options: ["2", "3", "4", "8"], answer: 2 },
-            //{ q: "The CNOT gate acts on how many qubits?", options: ["One", "Two", "Three", "Ten"], answer: 1 },
-            { type: "vf", q: "The CNOT gate acts on three qubits.", answer: 1 },
-            //{ q: "In which year did Google claim quantum supremacy?", options: ["2009", "2012", "2016", "2019"], answer: 3 },
-            { type: "vf", q: "Google claimed quantum supremacy in 2012.", answer: 1 },
-            { q: "Which is a common qubit technology?", options: ["Superconducting circuits", "Vacuum tubes", "Magnetic tape", "Punch cards"], answer: 0 }
-        ]
-    },
-    {
-        name: "Hard",
-        description: "Theory and advanced concepts",
-        questions: [
-            { q: "What does the Bloch sphere represent?", options: ["The cooling chamber", "The state of a single qubit", "A network of computers", "The speed of an algorithm"], answer: 1 },
-            //{ q: "What does the no-cloning theorem state?", options: ["Qubits cannot be measured", "Classical bits cannot be copied", "An unknown quantum state cannot be copied perfectly", "Two qubits cannot be entangled"], answer: 2 },
-            { type: "vf", q: "An unknown quantum state can be copied perfectly.", answer: 1 },
-            { q: "Which subroutine is central to Shor's algorithm?", options: ["Quantum Fourier Transform", "Binary search", "Bubble sort", "Hash function"], answer: 0 },
-            { q: "How many queries does Grover's algorithm need to search N items?", options: ["About N", "About N squared", "About log N", "About the square root of N"], answer: 3 },
-            { q: "Which complexity class captures problems efficiently solvable by a quantum computer?", options: ["P only", "BQP", "NP-hard only", "EXP"], answer: 1 },
-            { q: "Which of these is a leading quantum error-correcting code?", options: ["Morse code", "Huffman code", "Surface code", "ASCII"], answer: 2 },
-            //{ q: "The BB84 protocol is used for:", options: ["Quantum key distribution", "Quantum teleporting people", "Factoring numbers", "Qubit cooling"], answer: 0 },
-            { type: "vf", q: "The BB84 protocol is used for quantum key distribution.", answer: 0 },
-            { q: "The state |+> is equal to:", options: ["|0> - |1>", "(|0> + |1>) / sqrt(2)", "|1>", "|0> |1>"], answer: 1 },
-            { q: "What is a Toffoli gate?", options: ["A single-qubit rotation", "A measurement gate", "A two-qubit swap", "A three-qubit controlled-controlled-NOT gate"], answer: 3 },
-            //{ q: "What does Bell's theorem show?", options: ["Qubits are always 0", "No local hidden-variable theory can reproduce all quantum predictions", "Quantum computers are impossible", "Light is slower than sound"], answer: 1 }
-            { type: "vf", q: "Bell's theorem proves that quantum computers are impossible.", answer: 1 }
-        ]
-    }
-];
-const TIME_LIMITS = [10, 15, 20]; 
-
-// Question types: "qcm" (default, uses its own options) or "vf" (True/False).
-// For "vf", answer is 0 for True and 1 for False.
-const VF_OPTIONS = ["True", "False"];
+const TIME_LIMITS = [10, 15, 20];
+const VF_OPTIONS = ["True", "False"];   // "vf": answer 0 = True, 1 = False
 
 const SCORING = {
-    base: 100,         
-    maxTimeLoss: 0.5, 
-    changePenalty: 10, 
-    timeoutPenalty: 10 
+    base: 100,
+    maxTimeLoss: 0.5,
+    changePenalty: 10,
+    timeoutPenalty: 10
 };
 const MAX_POINTS = SCORING.base * 10;
 
@@ -75,25 +13,25 @@ const state = LEVELS.map(() => ({
     unlocked: false,
     answers: Array(10).fill(null),
     locked: Array(10).fill(false),
-    remaining: Array(10).fill(null),   
-    expired: Array(10).fill(false),   
-    changes: Array(10).fill(0),       
+    remaining: Array(10).fill(null),   // null = timer not started
+    expired: Array(10).fill(false),
+    changes: Array(10).fill(0),
     done: false,
-    best: null,                       
-    bestPoints: null                
+    best: null,
+    bestPoints: null
 }));
 state[0].unlocked = true;
 let current = 0;
-//progress saving
+
+/* ---------- Saved progress ---------- */
+
 const STORAGE_KEY = "quantum-quiz-progress";
 
 function saveProgress() {
     try {
         const data = state.map((s) => ({ unlocked: s.unlocked, best: s.best, bestPoints: s.bestPoints }));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch (e) {
-        // Storage unavailable (private mode, quota...): the quiz still works without saving.
-    }
+    } catch (e) { /* storage unavailable: the quiz still works */ }
 }
 
 function loadProgress() {
@@ -108,16 +46,16 @@ function loadProgress() {
                 state[i].bestPoints = d.bestPoints;
             }
         });
-    } catch (e) {
-        // Corrupted data: ignore it and start fresh.
-    }
+    } catch (e) { /* corrupted data: start fresh */ }
 }
-
 
 const $ = (id) => document.getElementById(id);
 const home = $("home"), quiz = $("quiz"), grid = $("grid");
 
-const getScore = (i) => state[i].answers.filter((a, k) => a === LEVELS[i].questions[k].answer).length;
+/* ---------- Helpers ---------- */
+
+const isSolved = (l, i) => state[l].answers[i] === LEVELS[l].questions[i].answer;
+const getScore = (l) => state[l].answers.filter((a, k) => isSolved(l, k)).length;
 
 function getFeedback(score) {
     if (score === 10) return "Quantum Master — flawless! Level completed!";
@@ -125,6 +63,8 @@ function getFeedback(score) {
     if (score >= 4) return "Scholar in Progress — keep refining your answers.";
     return "Quantum Novice — review the basics and try again.";
 }
+
+/* ---------- Scoring ---------- */
 
 function elapsedOf(l, i) {
     const r = state[l].remaining[i];
@@ -148,9 +88,7 @@ function questionResult(l, i) {
     const worth = worthAt(l, elapsedOf(l, i));
     r.timeLoss = SCORING.base - worth;
     r.changeLoss = Math.min(worth, s.changes[i] * SCORING.changePenalty);
-    if (s.answers[i] === LEVELS[l].questions[i].answer) {
-        r.points = worth - r.changeLoss;
-    }
+    if (isSolved(l, i)) r.points = worth - r.changeLoss;
     return r;
 }
 
@@ -158,10 +96,9 @@ function getTotals(l, onlyCorrect) {
     let points = 0, timeLoss = 0, changeLoss = 0, timeouts = 0;
     LEVELS[l].questions.forEach((q, i) => {
         const r = questionResult(l, i);
-        const ok = state[l].answers[i] === q.answer;
         points += r.points;
         timeouts += r.timeout;
-        if (!onlyCorrect || ok) {
+        if (!onlyCorrect || isSolved(l, i)) {
             timeLoss += r.timeLoss;
             changeLoss += r.changeLoss;
         }
@@ -200,9 +137,11 @@ function renderBreakdown(l) {
     });
 }
 
+/* ---------- Timer & status ---------- */
+
 function timerLabel(i) {
     const s = state[current];
-    if (s.done || s.expired[i] || s.answers[i] !== null) return "";
+    if (s.done || s.expired[i] || isSolved(current, i)) return "";
     const t = s.remaining[i] === null ? TIME_LIMITS[current] : s.remaining[i];
     const worth = worthAt(current, TIME_LIMITS[current] - t);
     return "⏱ " + t + "s · " + worth + " pts";
@@ -220,37 +159,34 @@ function paintTimer(i) {
 
 function updateStatus() {
     const s = state[current];
-
-    const answered = s.answers.filter((a) => a !== null).length;
+    const solved = getScore(current);
     const missed = s.expired.filter(Boolean).length;
-
-    const completed = answered + missed;
-
-    const percentage = (completed / 10) * 100;
-
-    $("progress-fill").style.width = percentage + "%";
-    $("progress").textContent = completed + " / 10";
-
+    const resolved = solved + missed;
     const t = getTotals(current, false);
     const lost = t.timeLoss + t.changeLoss + t.timeouts;
 
+    const fill = $("progress-fill");
+    if (fill) fill.style.width = (resolved / 10) * 100 + "%";
+
     $("progress").textContent = s.done
         ? "Finished"
-        : "Answered " + answered + " / 10" +
+        : "Solved " + solved + " / 10" +
           (missed ? " · Time's up: " + missed : "") +
           (lost ? " · Penalties: −" + lost : "");
 
-    $("finish").hidden = s.done || completed < 10;
+    $("finish").hidden = s.done || resolved < 10;
 }
 
+// One interval for the whole app. A question's clock runs from its first flip
+// until it is answered CORRECTLY (a wrong answer does not stop it).
 setInterval(() => {
-    if (quiz.hidden || document.hidden) return;  
+    if (quiz.hidden || document.hidden) return;
     const s = state[current];
     if (s.done) return;
 
     let changed = false;
     s.remaining.forEach((t, i) => {
-        if (t === null || s.answers[i] !== null || s.expired[i]) return;
+        if (t === null || s.expired[i] || isSolved(current, i)) return;
         s.remaining[i] = t - 1;
         if (s.remaining[i] <= 0) {
             s.remaining[i] = 0;
@@ -264,6 +200,7 @@ setInterval(() => {
     if (changed) updateStatus();
 }, 1000);
 
+/* ---------- Interface ---------- */
 
 function renderHome() {
     const box = $("levels");
@@ -274,14 +211,12 @@ function renderHome() {
         b.type = "button";
         b.className = "level";
         b.disabled = !s.unlocked;
-        //const pts = s.bestPoints !== null ? " · Best: " + s.bestPoints + " pts" : "";
         const pts = s.bestPoints !== null ? " · " + s.bestPoints + " pts" : "";
         const status = !s.unlocked
             ? "Level locked"
             : s.best === 10
                 ? "Completed (10/10) ✓" + pts
                 : s.best !== null
-                    // old is "Last score"
                     ? "Best score: " + s.best + "/10 (Needs 10/10)" + pts
                     : "Ready to play";
         b.innerHTML = "<strong>" + level.name + "</strong>" + level.description +
@@ -328,6 +263,7 @@ function makeCard(question, i) {
     const chosen = s.answers[i];
     const isCorrect = chosen === question.answer;
     const expired = s.expired[i];
+    const isVF = question.type === "vf";
 
     const card = document.createElement("div");
     card.className = "card";
@@ -340,7 +276,6 @@ function makeCard(question, i) {
     } else if (expired) {
         card.classList.add("expired");
     } else if (chosen !== null) {
-        //card.classList.add("answered");
         card.classList.add("answered", isCorrect ? "ok" : "bad");
     }
 
@@ -355,9 +290,7 @@ function makeCard(question, i) {
     }
     else if (s.locked[i]) mark = "Correct ✓";
     else if (expired) mark = "Time's up ✗";
-    //else if (chosen !== null) mark = "Answered ✓";
     else if (chosen !== null) mark = isCorrect ? "Correct ✓" : "Not right ✗";
-    
 
     card.innerHTML =
         '<div class="inner">' +
@@ -368,16 +301,13 @@ function makeCard(question, i) {
         "</div>";
     card.querySelector(".q").textContent = question.q;
     card.querySelectorAll(".timer").forEach((el) => paintEl(el, i));
-    //old version for only multiple choice questions
-    /*const opts = card.querySelector(".opts");
-    question.options.forEach((text, oi) => {*/
-    const opts = card.querySelector(".opts");
-    const isVF = question.type === "vf";
 
     const kind = document.createElement("span");
     kind.className = "qtype";
     kind.textContent = isVF ? "True / False" : "Multiple choice";
     card.querySelector(".q").before(kind);
+
+    const opts = card.querySelector(".opts");
     if (isVF) opts.classList.add("vf");
 
     (isVF ? VF_OPTIONS : question.options).forEach((text, oi) => {
@@ -386,17 +316,11 @@ function makeCard(question, i) {
         b.className = "option";
         b.textContent = text;
 
-        //if (oi === chosen) b.classList.add("chosen");
-        if (oi === chosen && !s.done) b.classList.add(isCorrect ? "ok" : "bad");
+        if (oi === chosen) b.classList.add(isCorrect ? "ok" : "bad");
 
-
-        if (s.done) {
-            b.disabled = true;
-            if (oi === question.answer) b.classList.add("ok");
-            else if (oi === chosen) b.classList.add("bad");
-        } 
-        //add isCorrect
-        else if (expired || s.locked[i] || isCorrect) {
+        // Once finished, only the player's own answers are coloured:
+        // the correct option of a timed-out question is not revealed.
+        if (s.done || expired || s.locked[i] || isCorrect) {
             b.disabled = true;
         } else {
             b.addEventListener("click", (e) => {
@@ -407,8 +331,7 @@ function makeCard(question, i) {
         opts.appendChild(b);
     });
 
-    // new block of code
-        if (chosen !== null && !s.done) {
+    if (chosen !== null && !s.done) {
         const fb = document.createElement("p");
         fb.className = "feedback " + (isCorrect ? "ok" : "bad");
         fb.textContent = isCorrect
@@ -417,7 +340,7 @@ function makeCard(question, i) {
         card.querySelector(".back").appendChild(fb);
     }
 
-
+    // The clock starts the first time the card is flipped
     const flip = () => {
         if (s.done || s.expired[i]) return;
         if (s.remaining[i] === null && s.answers[i] === null) {
@@ -433,51 +356,51 @@ function makeCard(question, i) {
 }
 
 function answer(i, oi) {
-    /*const s = state[current];
-    if (s.expired[i] || s.locked[i]) return;
-    if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;   
-    s.answers[i] = oi;
-    renderQuiz();*/
     const s = state[current];
     const question = LEVELS[current].questions[i];
-    if (s.expired[i] || s.locked[i] || s.answers[i] === question.answer) return;
+    if (s.expired[i] || s.locked[i] || isSolved(current, i)) return;
+
     if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;
     s.answers[i] = oi;
 
-    // Rebuild only this card and keep it flipped so the feedback is visible at once
+    // Rebuild only this card and keep it flipped so the feedback shows at once
     const card = makeCard(question, i);
     card.classList.add("flipped");
     grid.children[i].replaceWith(card);
     card.focus();
     updateStatus();
 
-    $("sr-feedback").textContent = "Question " + (i + 1) + ": " +
-        (oi === question.answer ? "correct." : "not right, try another answer.");
-
+    const sr = $("sr-feedback");
+    if (sr) {
+        sr.textContent = "Question " + (i + 1) + ": " +
+            (oi === question.answer ? "correct." : "not right, try another answer.");
+    }
 }
+
+/* ---------- Buttons ---------- */
 
 $("finish").addEventListener("click", () => {
     const s = state[current];
     s.done = true;
     const score = getScore(current);
-    // Save the best score
     s.best = Math.max(s.best ?? 0, score);
     s.bestPoints = Math.max(s.bestPoints ?? 0, getTotals(current, true).total);
-    s.locked = s.answers.map((a, k) => a === LEVELS[current].questions[k].answer);
+    s.locked = s.answers.map((a, k) => isSolved(current, k));
 
     if (score === 10 && current + 1 < LEVELS.length) {
         state[current + 1].unlocked = true;
     }
     saveProgress();
-    
+
     renderQuiz();
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+// Retry: solved questions keep their frozen timer (same points); the rest restart
 $("retry").addEventListener("click", () => {
     const s = state[current];
     s.answers = s.answers.map((a, k) => (s.locked[k] ? a : null));
-    s.remaining = s.remaining.map((t, k) => (s.locked[k] ? t : null));  
+    s.remaining = s.remaining.map((t, k) => (s.locked[k] ? t : null));
     s.expired = s.expired.map((e, k) => (s.locked[k] ? e : false));
     s.changes = s.changes.map((c, k) => (s.locked[k] ? c : 0));
     s.done = false;
@@ -485,7 +408,7 @@ $("retry").addEventListener("click", () => {
 });
 
 $("next").addEventListener("click", () => {
-    if (state[current].best === 10 && current + 1 < LEVELS.length) {
+    if (getScore(current) === 10 && current + 1 < LEVELS.length) {
         current += 1;
         renderQuiz();
         window.scrollTo({ top: 0 });

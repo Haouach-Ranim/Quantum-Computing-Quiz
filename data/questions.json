@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Easy",
+    "description": "The basics of quantum computing",
+    "questions": [
+      { "q": "What is the basic unit of information in a quantum computer?", "options": ["Bit", "Byte", "Qubit", "Pixel"], "answer": 2 },
+      { "type": "vf", "q": "A classical bit can only be 0 or 1.", "options": ["True", "False"], "answer": 0 },
+      { "q": "What does superposition mean for a qubit?", "options": ["It is switched off", "It is a combination of 0 and 1 at the same time", "It is copied twice", "It moves faster than light"], "answer": 1 },
+      { "q": "Quantum computers are expected to be especially good at:", "options": ["Browsing the web", "Playing videos", "Solving certain very complex problems faster", "Storing photos"], "answer": 2 },
+      { "type": "vf", "q": "Quantum computers rely on quantum mechanics.", "options": ["True", "False"], "answer": 0 },
+      { "q": "Which company created the Qiskit toolkit?", "options": ["IBM", "Apple", "Netflix", "Tesla"], "answer": 0 },
+      { "q": "What do you get when you measure a qubit?", "options": ["A decimal number", "A color", "0 or 1", "Nothing"], "answer": 2 },
+      { "type": "vf", "q": "Quantum computers are expected to replace everyday laptops within the next year.", "options": ["True", "False"], "answer": 1 },
+      { "q": "What is entanglement?", "options": ["Two qubits linked so that their states are correlated", "A broken qubit", "A type of cable", "A programming language"], "answer": 0 },
+      { "q": "Why are many quantum computers kept extremely cold?", "options": ["To save electricity", "To reduce noise and keep fragile quantum states stable", "To look impressive", "To prevent rust"], "answer": 1 }
+    ]
+  },
+  {
+    "name": "Medium",
+    "description": "Gates, algorithms and key ideas",
+    "questions": [
+      { "q": "Which gate puts a qubit into an equal superposition?", "options": ["AND gate", "Hadamard gate", "NOT gate", "OR gate"], "answer": 1 },
+      { "type": "vf", "q": "The Pauli-X gate flips a qubit from 0 to 1 (and 1 to 0).", "options": ["True", "False"], "answer": 0 },
+      { "q": "What is Shor's algorithm used for?", "options": ["Sorting lists", "Searching a database", "Factoring large integers", "Compressing files"], "answer": 2 },
+      { "q": "What is Grover's algorithm used for?", "options": ["Searching an unsorted database faster", "Encrypting messages", "Drawing graphics", "Cooling qubits"], "answer": 0 },
+      { "q": "What is decoherence?", "options": ["Merging two qubits", "A kind of quantum gate", "A cooling method", "The loss of a qubit's quantum state due to its environment"], "answer": 3 },
+      { "q": "What is a Bell state?", "options": ["A sound produced by qubits", "A maximally entangled two-qubit state", "A qubit at rest", "A type of error"], "answer": 1 },
+      { "q": "How many basis states can 2 qubits be in superposition of?", "options": ["2", "3", "4", "8"], "answer": 2 },
+      { "type": "vf", "q": "The CNOT gate acts on three qubits.", "options": ["True", "False"], "answer": 1 },
+      { "type": "vf", "q": "Google claimed quantum supremacy in 2012.", "options": ["True", "False"], "answer": 1 },
+      { "q": "Which is a common qubit technology?", "options": ["Superconducting circuits", "Vacuum tubes", "Magnetic tape", "Punch cards"], "answer": 0 }
+    ]
+  },
+  {
+    "name": "Hard",
+    "description": "Theory and advanced concepts",
+    "questions": [
+      { "q": "What does the Bloch sphere represent?", "options": ["The cooling chamber", "The state of a single qubit", "A network of computers", "The speed of an algorithm"], "answer": 1 },
+      { "type": "vf", "q": "An unknown quantum state can be copied perfectly.", "options": ["True", "False"], "answer": 1 },
+      { "q": "Which subroutine is central to Shor's algorithm?", "options": ["Quantum Fourier Transform", "Binary search", "Bubble sort", "Hash function"], "answer": 0 },
+      { "q": "How many queries does Grover's algorithm need to search N items?", "options": ["About N", "About N squared", "About log N", "About the square root of N"], "answer": 3 },
+      { "q": "Which complexity class captures problems efficiently solvable by a quantum computer?", "options": ["P only", "BQP", "NP-hard only", "EXP"], "answer": 1 },
+      { "q": "Which of these is a leading quantum error-correcting code?", "options": ["Morse code", "Huffman code", "Surface code", "ASCII"], "answer": 2 },
+      { "type": "vf", "q": "The BB84 protocol is used for quantum key distribution.", "options": ["True", "False"], "answer": 0 },
+      { "q": "The state |+> is equal to:", "options": ["|0> - |1>", "(|0> + |1>) / sqrt(2)", "|1>", "|0> |1>"], "answer": 1 },
+      { "q": "What is a Toffoli gate?", "options": ["A single-qubit rotation", "A measurement gate", "A two-qubit swap", "A three-qubit controlled-controlled-NOT gate"], "answer": 3 },
+      { "type": "vf", "q": "Bell's theorem proves that quantum computers are impossible.", "options": ["True", "False"], "answer": 1 }
+    ]
+  }
+]
