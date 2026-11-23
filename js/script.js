@@ -1,62 +1,14 @@
+// Level names and descriptions stay here.
+// The questions are loaded from the database by php/get_questions.php (see init() at the end).
 const LEVELS = [
-    {
-        name: "Easy",
-        description: "The basics of quantum computing",
-        questions: [
-            { q: "What is the basic unit of information in a quantum computer?", options: ["Bit", "Byte", "Qubit", "Pixel"], answer: 2 },
-            //{ q: "A classical bit can be in which state?", options: ["0 or 1 only", "Any number", "Only 1", "Neither 0 nor 1"], answer: 0 },
-            { type: "vf", q: "A classical bit can only be 0 or 1.", answer: 0 },
-            { q: "What does superposition mean for a qubit?", options: ["It is switched off", "It is a combination of 0 and 1 at the same time", "It is copied twice", "It moves faster than light"], answer: 1 },
-            { q: "Quantum computers are expected to be especially good at:", options: ["Browsing the web", "Playing videos", "Solving certain very complex problems faster", "Storing photos"], answer: 2 },
-            //{ q: "Which branch of physics do quantum computers rely on?", options: ["Thermodynamics", "Quantum mechanics", "Optics only", "Fluid mechanics"], answer: 1 },
-            { type: "vf", q: "Quantum computers rely on quantum mechanics.", answer: 0 },
-            { q: "Which company created the Qiskit toolkit?", options: ["IBM", "Apple", "Netflix", "Tesla"], answer: 0 },
-            { q: "What do you get when you measure a qubit?", options: ["A decimal number", "A color", "0 or 1", "Nothing"], answer: 2 },
-            //{ q: "Will quantum computers replace everyday laptops soon?", options: ["Yes, next year", "No, they are specialised machines", "Yes, they are cheaper", "They already have"], answer: 1 },
-            { type: "vf", q: "Quantum computers are expected to replace everyday laptops within the next year.", answer: 1 },
-            { q: "What is entanglement?", options: ["Two qubits linked so that their states are correlated", "A broken qubit", "A type of cable", "A programming language"], answer: 0 },
-            { q: "Why are many quantum computers kept extremely cold?", options: ["To save electricity", "To reduce noise and keep fragile quantum states stable", "To look impressive", "To prevent rust"], answer: 1 }
-        ]
-    },
-    {
-        name: "Medium",
-        description: "Gates, algorithms and key ideas",
-        questions: [
-            { q: "Which gate puts a qubit into an equal superposition?", options: ["AND gate", "Hadamard gate", "NOT gate", "OR gate"], answer: 1 },
-            //{ q: "Which gate flips a qubit from 0 to 1 (and 1 to 0)?", options: ["Pauli-X gate", "Hadamard gate", "Phase gate", "Measure gate"], answer: 0 },
-            { type: "vf", q: "The Pauli-X gate flips a qubit from 0 to 1 (and 1 to 0).", answer: 0 },
-            { q: "What is Shor's algorithm used for?", options: ["Sorting lists", "Searching a database", "Factoring large integers", "Compressing files"], answer: 2 },
-            { q: "What is Grover's algorithm used for?", options: ["Searching an unsorted database faster", "Encrypting messages", "Drawing graphics", "Cooling qubits"], answer: 0 },
-            { q: "What is decoherence?", options: ["Merging two qubits", "A kind of quantum gate", "A cooling method", "The loss of a qubit's quantum state due to its environment"], answer: 3 },
-            { q: "What is a Bell state?", options: ["A sound produced by qubits", "A maximally entangled two-qubit state", "A qubit at rest", "A type of error"], answer: 1 },
-            { q: "How many basis states can 2 qubits be in superposition of?", options: ["2", "3", "4", "8"], answer: 2 },
-            //{ q: "The CNOT gate acts on how many qubits?", options: ["One", "Two", "Three", "Ten"], answer: 1 },
-            { type: "vf", q: "The CNOT gate acts on three qubits.", answer: 1 },
-            //{ q: "In which year did Google claim quantum supremacy?", options: ["2009", "2012", "2016", "2019"], answer: 3 },
-            { type: "vf", q: "Google claimed quantum supremacy in 2012.", answer: 1 },
-            { q: "Which is a common qubit technology?", options: ["Superconducting circuits", "Vacuum tubes", "Magnetic tape", "Punch cards"], answer: 0 }
-        ]
-    },
-    {
-        name: "Hard",
-        description: "Theory and advanced concepts",
-        questions: [
-            { q: "What does the Bloch sphere represent?", options: ["The cooling chamber", "The state of a single qubit", "A network of computers", "The speed of an algorithm"], answer: 1 },
-            //{ q: "What does the no-cloning theorem state?", options: ["Qubits cannot be measured", "Classical bits cannot be copied", "An unknown quantum state cannot be copied perfectly", "Two qubits cannot be entangled"], answer: 2 },
-            { type: "vf", q: "An unknown quantum state can be copied perfectly.", answer: 1 },
-            { q: "Which subroutine is central to Shor's algorithm?", options: ["Quantum Fourier Transform", "Binary search", "Bubble sort", "Hash function"], answer: 0 },
-            { q: "How many queries does Grover's algorithm need to search N items?", options: ["About N", "About N squared", "About log N", "About the square root of N"], answer: 3 },
-            { q: "Which complexity class captures problems efficiently solvable by a quantum computer?", options: ["P only", "BQP", "NP-hard only", "EXP"], answer: 1 },
-            { q: "Which of these is a leading quantum error-correcting code?", options: ["Morse code", "Huffman code", "Surface code", "ASCII"], answer: 2 },
-            //{ q: "The BB84 protocol is used for:", options: ["Quantum key distribution", "Quantum teleporting people", "Factoring numbers", "Qubit cooling"], answer: 0 },
-            { type: "vf", q: "The BB84 protocol is used for quantum key distribution.", answer: 0 },
-            { q: "The state |+> is equal to:", options: ["|0> - |1>", "(|0> + |1>) / sqrt(2)", "|1>", "|0> |1>"], answer: 1 },
-            { q: "What is a Toffoli gate?", options: ["A single-qubit rotation", "A measurement gate", "A two-qubit swap", "A three-qubit controlled-controlled-NOT gate"], answer: 3 },
-            //{ q: "What does Bell's theorem show?", options: ["Qubits are always 0", "No local hidden-variable theory can reproduce all quantum predictions", "Quantum computers are impossible", "Light is slower than sound"], answer: 1 }
-            { type: "vf", q: "Bell's theorem proves that quantum computers are impossible.", answer: 1 }
-        ]
-    }
+    { name: "Easy", description: "The basics of quantum computing", questions: [] },
+    { name: "Medium", description: "Gates, algorithms and key ideas", questions: [] },
+    { name: "Hard", description: "Theory and advanced concepts", questions: [] }
 ];
+
+// Folder of the PHP scripts, relative to html/index.html
+const API = "../php/";
+
 const TIME_LIMITS = [10, 15, 20]; 
 
 // Question types: "qcm" (default, uses its own options) or "vf" (True/False).
@@ -78,6 +30,11 @@ const state = LEVELS.map(() => ({
     remaining: Array(10).fill(null),   
     expired: Array(10).fill(false),   
     changes: Array(10).fill(0),       
+    correct: Array(10).fill(null),     // true / false, decided by the server
+    pending: Array(10).fill(false),    // answer being checked by the server
+    scoreSaved: false,
+    scoreMsg: "",
+    saveFailed: false,
     done: false,
     best: null,                       
     bestPoints: null                
@@ -86,11 +43,16 @@ state[0].unlocked = true;
 let current = 0;
 //progress saving
 const STORAGE_KEY = "quantum-quiz-progress";
+const PLAYER_KEY = "quantum-quiz-player";
+const NAME_PATTERN = /^[\p{L}\p{N} _-]{2,20}$/u;   // same rule as php/save_score.php
+let player = null;                                    // current player name
+// Each player has his own progress (unlocked levels, best scores) in this browser.
+const progressKey = () => STORAGE_KEY + ":" + String(player).toLowerCase();
 
 function saveProgress() {
     try {
         const data = state.map((s) => ({ unlocked: s.unlocked, best: s.best, bestPoints: s.bestPoints }));
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(progressKey(), JSON.stringify(data));
     } catch (e) {
         // Storage unavailable (private mode, quota...): the quiz still works without saving.
     }
@@ -98,7 +60,7 @@ function saveProgress() {
 
 function loadProgress() {
     try {
-        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const data = JSON.parse(localStorage.getItem(progressKey()));
         if (!Array.isArray(data)) return;
         data.forEach((d, i) => {
             if (!state[i] || !d || typeof d !== "object") return;
@@ -117,7 +79,33 @@ function loadProgress() {
 const $ = (id) => document.getElementById(id);
 const home = $("home"), quiz = $("quiz"), grid = $("grid");
 
-const getScore = (i) => state[i].answers.filter((a, k) => a === LEVELS[i].questions[k].answer).length;
+// ---- Communication JavaScript -> PHP (fetch) ----
+async function callPHP(script, options) {
+    const res = await fetch(API + script, options);
+    let data = null;
+    try { data = await res.json(); } catch (e) { /* not JSON */ }
+    if (!res.ok || !data) {
+        throw new Error((data && data.error) || "Server error (" + res.status + ")");
+    }
+    return data;
+}
+const getJSON = (script) => callPHP(script);
+const postJSON = (script, body) => callPHP(script, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+});
+
+function showError(message) {
+    const box = $("app-error");
+    box.textContent = message;
+    box.hidden = !message;
+}
+
+// The 10 answers of the current level, in the format expected by the PHP scripts
+const answersPayload = (l) => LEVELS[l].questions.map((q, i) => ({ id: q.id, choice: state[l].answers[i] }));
+
+const getScore = (i) => state[i].correct.filter((c) => c === true).length;
 
 function getFeedback(score) {
     if (score === 10) return "Quantum Master — flawless! Level completed!";
@@ -148,7 +136,7 @@ function questionResult(l, i) {
     const worth = worthAt(l, elapsedOf(l, i));
     r.timeLoss = SCORING.base - worth;
     r.changeLoss = Math.min(worth, s.changes[i] * SCORING.changePenalty);
-    if (s.answers[i] === LEVELS[l].questions[i].answer) {
+    if (s.correct[i] === true) {
         r.points = worth - r.changeLoss;
     }
     return r;
@@ -158,7 +146,7 @@ function getTotals(l, onlyCorrect) {
     let points = 0, timeLoss = 0, changeLoss = 0, timeouts = 0;
     LEVELS[l].questions.forEach((q, i) => {
         const r = questionResult(l, i);
-        const ok = state[l].answers[i] === q.answer;
+        const ok = state[l].correct[i] === true;
         points += r.points;
         timeouts += r.timeout;
         if (!onlyCorrect || ok) {
@@ -289,6 +277,8 @@ function renderHome() {
         b.addEventListener("click", () => openLevel(i));
         box.appendChild(b);
     });
+    $("welcome").hidden = true;
+    $("player-label").textContent = player;
     home.hidden = false;
     quiz.hidden = true;
 }
@@ -315,6 +305,7 @@ function renderQuiz() {
         $("feedback").textContent = getFeedback(score);
         $("retry").hidden = score === 10;
         $("next").hidden = score !== 10 || current === LEVELS.length - 1;
+        renderScoreStatus();
     }
 
     updateStatus();
@@ -326,7 +317,7 @@ function renderQuiz() {
 function makeCard(question, i) {
     const s = state[current];
     const chosen = s.answers[i];
-    const isCorrect = chosen === question.answer;
+    const isCorrect = s.correct[i] === true;
     const expired = s.expired[i];
 
     const card = document.createElement("div");
@@ -392,8 +383,7 @@ function makeCard(question, i) {
 
         if (s.done) {
             b.disabled = true;
-            if (oi === question.answer) b.classList.add("ok");
-            else if (oi === chosen) b.classList.add("bad");
+            if (oi === chosen) b.classList.add(isCorrect ? "ok" : "bad");
         } 
         //add isCorrect
         else if (expired || s.locked[i] || isCorrect) {
@@ -432,17 +422,34 @@ function makeCard(question, i) {
     return card;
 }
 
-function answer(i, oi) {
-    /*const s = state[current];
-    if (s.expired[i] || s.locked[i]) return;
-    if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;   
+async function answer(i, oi) {
+    const l = current;
+    const s = state[l];
+    const question = LEVELS[l].questions[i];
+    if (s.expired[i] || s.locked[i] || s.correct[i] === true || s.pending[i] || s.answers[i] === oi) return;
+
+    const previous = s.answers[i];
+    const counted = previous !== null;          // changing a wrong answer costs points
+    if (counted) s.changes[i]++;
     s.answers[i] = oi;
-    renderQuiz();*/
-    const s = state[current];
-    const question = LEVELS[current].questions[i];
-    if (s.expired[i] || s.locked[i] || s.answers[i] === question.answer) return;
-    if (s.answers[i] !== null && s.answers[i] !== oi) s.changes[i]++;
-    s.answers[i] = oi;
+    s.pending[i] = true;
+
+    try {
+        // The server checks the answer: the correct one is never in the browser.
+        const data = await postJSON("check_answer.php", { question_id: question.id, choice: oi });
+        s.correct[i] = data.correct === true;
+    } catch (err) {
+        s.answers[i] = previous;                // undo: the answer was not checked
+        if (counted) s.changes[i]--;
+        s.pending[i] = false;
+        $("sr-feedback").textContent = "Could not check the answer. Please try again.";
+        showError("Could not check your answer: " + err.message);
+        return;
+    }
+    s.pending[i] = false;
+    showError("");
+
+    if (current !== l || quiz.hidden) return;   // the player left the level meanwhile
 
     // Rebuild only this card and keep it flipped so the feedback is visible at once
     const card = makeCard(question, i);
@@ -452,26 +459,45 @@ function answer(i, oi) {
     updateStatus();
 
     $("sr-feedback").textContent = "Question " + (i + 1) + ": " +
-        (oi === question.answer ? "correct." : "not right, try another answer.");
-
+        (s.correct[i] ? "correct." : "not right, try another answer.");
 }
 
-$("finish").addEventListener("click", () => {
-    const s = state[current];
+$("finish").addEventListener("click", async () => {
+    const l = current;
+    const s = state[l];
+    const button = $("finish");
+    button.disabled = true;
+
+    try {
+        // The server checks the 10 answers and sends back the correction.
+        const data = await postJSON("submit_answers.php", { level: l, answers: answersPayload(l) });
+        s.correct = data.results.map((r) => r === true);
+    } catch (err) {
+        showError("Could not check your answers: " + err.message);
+        button.disabled = false;
+        return;
+    }
+    button.disabled = false;
+    showError("");
+
     s.done = true;
-    const score = getScore(current);
+    s.scoreSaved = false;
+    const score = getScore(l);
     // Save the best score
     s.best = Math.max(s.best ?? 0, score);
-    s.bestPoints = Math.max(s.bestPoints ?? 0, getTotals(current, true).total);
-    s.locked = s.answers.map((a, k) => a === LEVELS[current].questions[k].answer);
+    s.bestPoints = Math.max(s.bestPoints ?? 0, getTotals(l, true).total);
+    s.locked = s.correct.slice();
 
-    if (score === 10 && current + 1 < LEVELS.length) {
-        state[current + 1].unlocked = true;
+    if (score === 10 && l + 1 < LEVELS.length) {
+        state[l + 1].unlocked = true;
     }
     saveProgress();
-    
+
     renderQuiz();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+
+    saveScore(l);   // the score is saved automatically with the player's name
 });
 
 $("retry").addEventListener("click", () => {
@@ -480,7 +506,9 @@ $("retry").addEventListener("click", () => {
     s.remaining = s.remaining.map((t, k) => (s.locked[k] ? t : null));  
     s.expired = s.expired.map((e, k) => (s.locked[k] ? e : false));
     s.changes = s.changes.map((c, k) => (s.locked[k] ? c : 0));
+    s.correct = s.correct.map((c, k) => (s.locked[k] ? c : null));
     s.done = false;
+    s.scoreSaved = false;
     renderQuiz();
 });
 
@@ -494,5 +522,132 @@ $("next").addEventListener("click", () => {
 
 $("back").addEventListener("click", renderHome);
 
-loadProgress();
-renderHome();
+// ---- Save the score automatically (JS -> PHP -> database) ----
+function renderScoreStatus() {
+    const s = state[current];
+    $("score-msg").textContent = s.scoreMsg;
+    $("retry-save").hidden = !s.saveFailed;
+}
+
+async function saveScore(l) {
+    const s = state[l];
+    s.saveFailed = false;
+    s.scoreMsg = "Saving your score…";
+    if (current === l) renderScoreStatus();
+
+    try {
+        const data = await postJSON("save_score.php", {
+            name: player,
+            level: l,
+            answers: answersPayload(l),
+            points: getTotals(l, true).total
+        });
+        s.scoreSaved = true;
+        s.scoreMsg = (data.improved
+            ? "New best saved ✓ "
+            : "Your best score is still " + data.best + " pts. ") +
+            "You are #" + data.rank + " in the " + LEVELS[l].name + " leaderboard.";
+        $("lb-level").value = String(l);
+        loadLeaderboard(l);
+    } catch (err) {
+        s.saveFailed = true;
+        s.scoreMsg = "Could not save your score: " + err.message;
+    }
+    if (current === l && s.done) renderScoreStatus();
+}
+
+$("retry-save").addEventListener("click", () => {
+    if (state[current].done) saveScore(current);
+});
+
+// ---- Welcome screen: the player types his name once ----
+function showWelcome() {
+    home.hidden = true;
+    quiz.hidden = true;
+    $("welcome").hidden = false;
+    $("welcome-name").focus();
+}
+
+$("welcome-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = $("welcome-name").value.trim();
+    if (!NAME_PATTERN.test(name)) {
+        $("welcome-msg").textContent = "Use 2 to 20 letters, digits, spaces, _ or -.";
+        return;
+    }
+    player = name;
+    try { localStorage.setItem(PLAYER_KEY, name); } catch (err) { /* ignore */ }
+    $("welcome-msg").textContent = "";
+    loadProgress();
+    renderHome();
+    loadLeaderboard(Number($("lb-level").value));
+});
+
+$("change-player").addEventListener("click", () => {
+    try { localStorage.removeItem(PLAYER_KEY); } catch (err) { /* ignore */ }
+    location.reload();   // fresh state, then the welcome screen asks for the new name
+});
+
+// ---- Leaderboard (PHP -> JS) ----
+async function loadLeaderboard(level) {
+    const body = $("lb-body");
+    const msg = $("lb-msg");
+    try {
+        const data = await getJSON("leaderboard.php?level=" + level);
+        body.replaceChildren();
+        data.scores.forEach((row) => {
+            const tr = document.createElement("tr");
+            const isMe = player !== null && row.name.toLowerCase() === player.toLowerCase();
+            if (isMe) tr.classList.add("me");
+            [row.rank, isMe ? row.name + " (you)" : row.name, row.correct + " / 10", row.points, row.date].forEach((value) => {
+                const td = document.createElement("td");
+                td.textContent = value;        // textContent: a name can never inject HTML
+                tr.appendChild(td);
+            });
+            body.appendChild(tr);
+        });
+        msg.textContent = data.scores.length ? "" : "No scores yet. Be the first!";
+    } catch (err) {
+        body.replaceChildren();
+        msg.textContent = "Could not load the leaderboard.";
+    }
+}
+
+function initLeaderboard() {
+    const select = $("lb-level");
+    LEVELS.forEach((level, i) => {
+        const option = document.createElement("option");
+        option.value = String(i);
+        option.textContent = level.name;
+        select.appendChild(option);
+    });
+    select.addEventListener("change", () => loadLeaderboard(Number(select.value)));
+    loadLeaderboard(0);
+}
+
+// ---- Start: load the questions from the database, then show the home screen ----
+async function init() {
+    try {
+        const data = await getJSON("get_questions.php");
+        data.levels.forEach((questions, l) => {
+            if (LEVELS[l]) LEVELS[l].questions = questions;
+        });
+        if (LEVELS.some((level) => level.questions.length !== 10)) {
+            throw new Error("each level needs exactly 10 questions");
+        }
+    } catch (err) {
+        showError("Could not load the questions (" + err.message + "). Start Apache and MySQL, " +
+            "import database/quiz.sql, and open this page through http://localhost/.");
+        return;
+    }
+    try { player = localStorage.getItem(PLAYER_KEY) || null; } catch (e) { /* ignore */ }
+    if (player) {
+        loadProgress();
+        renderHome();
+    } else {
+        showWelcome();
+    }
+    initLeaderboard();
+}
+
+init();
